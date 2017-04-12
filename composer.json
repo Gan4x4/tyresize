@@ -1,0 +1,25 @@
+{
+    "name":"gan4x4/tyresize",
+    "description": "Tyre size parser",
+    "type": "library",
+    "keywords": ["tire", "tyre","tyresize"],
+    "authors": [
+        {
+            "name": "Anton Ganichev",
+            "homepage": "http://gan4x4.ru"
+        }
+    ],
+    "license" :"MIT",
+    "version":"1.0.1",
+    "require":{
+        "php":">=5.4.4"
+    },
+    "require-dev": {
+       "phpunit/phpunit": "~5.0"
+   },
+    "autoload":{
+        "psr-0":{
+            "gan4x4\\Market" : "src"
+        }
+    }
+}

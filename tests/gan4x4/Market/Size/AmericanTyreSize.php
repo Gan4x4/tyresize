@@ -19,5 +19,4 @@ public function testIsAmericanSizePositive() {
         $this->assertEquals(TyreSize::CORD_DIAGONAL,$size->getCord());
     }
     
-    
 }

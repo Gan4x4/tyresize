@@ -93,6 +93,17 @@ use gan4x4\Market\Size\InchTyreSize;
         $this->assertEquals(16,$disk);
     }
     
+    
+    public function testSizeConversion(){
+        $size = TyreSize::parseSize("36x12.5-16");
+        $this->assertClassesEqual('InchTyreSize',get_class($size));
+        
+        // Metric eqivalent is 315.5/80-16
+        $this->assertEquals(320,$size->getMetricWidth());
+        $this->assertEquals(80,$size->getProfile());
+        $this->assertEquals("320/80-16",$size->getMetricName());
+    }
+    
     public function testExtractDiskHummer() {
         $disk = TyreSize::parseSize("35x12,5R16.5")->getDisk();
         $this->assertEquals(16.5,$disk);

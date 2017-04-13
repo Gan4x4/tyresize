@@ -2,6 +2,7 @@
     "name":"gan4x4/tyresize",
     "description": "Tyre size parser",
     "type": "library",
+    "homepage": "https://github.com/Gan4x4/tyresize",
     "keywords": ["tire", "tyre","tyresize"],
     "authors": [
         {

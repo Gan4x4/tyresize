@@ -52,11 +52,12 @@ abstract class  TyreSize extends Size{
         
     }
     
+    
+    // helper functions
     public static function getFloat($str){
         $noComma = strtr($str,',','.');
         return floatval($noComma);
     }
-
 
     public static function truncateFloat($number){
         return number_format((float)$number, 1, '.', '');
@@ -92,7 +93,9 @@ abstract class  TyreSize extends Size{
             return self::truncateFloat($goodNumber/10);
         }
     }
-
+    //==================== end helper ========================================
+    
+    
     protected function getHeigth()
     {
         return $this->heigth;
@@ -108,6 +111,10 @@ abstract class  TyreSize extends Size{
         return $this->disk;
     }
     
+    // synonim of getCm_H()
+    public function getProfile(){
+        return $this->getCm_H();        
+    }
     public function getCm_H()
     {
         $h = floatval($this->getHeigth());
@@ -118,6 +125,11 @@ abstract class  TyreSize extends Size{
         $percentOfW = round(100*$profileH/$w);
         return  self::round5Int($percentOfW);
         
+    }
+    
+    // synonim 
+    public function getMetricWidth(){
+        return $this->getCm_W();        
     }
     
     public function getCm_W()

@@ -24,7 +24,7 @@ try{
     
     // Convert to metric size
     
-    print $tyreSize->getMetricName();
+    print "Metric name ".$tyreSize->getMetricName()."\n";
     
 } catch (InvalidTyreSizeException $ex) {
     print "Invalid tyre size";

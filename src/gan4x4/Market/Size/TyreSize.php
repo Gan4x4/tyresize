@@ -2,6 +2,7 @@
 
 namespace gan4x4\Market\Size;
 use gan4x4\Market\Size;
+use gan4x4\Market\Size\InvalidTyreSizeException;
 
 abstract class  TyreSize extends Size{
     const CORD_RADIAL = 'Радиальная';
@@ -14,6 +15,10 @@ abstract class  TyreSize extends Size{
     protected $disk = 0;   // inch
     protected $cord = null;   
     
+    /*
+     * Return original tyre mark without dust sumbols as LT or spase
+     * @return string 
+     */
     abstract function getClearOriginal();
     
     protected function __construct($original) {
@@ -46,14 +51,13 @@ abstract class  TyreSize extends Size{
         }
         
         if ($object == false){
-            throw new \Exception("Unknown size :".$originalSize);
+            throw new InvalidTyreSizeException();
         }
         return $object;
-        
     }
     
     
-    // helper functions
+    // ==================== helper functions ==================================
     public static function getFloat($str){
         $noComma = strtr($str,',','.');
         return floatval($noComma);
@@ -96,27 +100,32 @@ abstract class  TyreSize extends Size{
     //==================== end helper ========================================
     
     
-    protected function getHeigth()
-    {
-        return $this->heigth;
-    }
+    //=================== public interface ===================================
     
-    protected function getWidth()
-    {
-        return $this->width;
-    }
     
-    public function getDisk()
+    /*
+    *  Get wheel diametr in inches
+    *  @return  float 
+    */
+    public function getWheel()
     {
         return $this->disk;
     }
-    
-    // synonim of getCm_H()
-    public function getProfile(){
-        return $this->getCm_H();        
+   
+    /*
+    *  Get rounded tyre Width in millimeters
+    *  @return  int 
+    */
+    public function getMetricWidth(){
+        $w = round($this->getWidth()*self::INCH);
+        return self::round5Int($w);   
     }
-    public function getCm_H()
-    {
+        
+    /*
+    * get rounded tyre profile in percent
+    * @return  int 
+    */
+    public function getProfile(){
         $h = floatval($this->getHeigth());
         $w = floatval($this->getWidth());
         $d = floatval($this->getDisk());
@@ -124,34 +133,49 @@ abstract class  TyreSize extends Size{
         $profileH = ($h-$d)/2;
         $percentOfW = round(100*$profileH/$w);
         return  self::round5Int($percentOfW);
-        
+              
     }
     
-    // synonim 
-    public function getMetricWidth(){
-        return $this->getCm_W();        
-    }
-    
-    public function getCm_W()
+    /*
+    * get rounded tyre Heigth in inch
+    * @return  int 
+    */
+    public function getInchHeigth()
     {
-        $w = round($this->getWidth()*self::INCH);
-        return self::round5Int($w);
+        return self::round5Float($this->getHeigth());
     }
     
-    
-    public function getInch_H()
-    {
-        $h =  $this->getHeigth();
-        return self::round5Float($h);
-    }
-    
-    public function getInch_W()
+    /*
+    * get rounded tyre width in inch
+    * @return  int 
+    */
+    public function getInchWidth()
     {
         return self::round5Float($this->getWidth());
     }
     
     
-    public function getMetricName(){
+    /*
+    * Generate American(inch) name for tyre e.g. 31/10R15
+    * @return string
+    */
+    public function getInchName()
+    {
+        $h =  self::round5Float($this->getHeigth());
+        $w =  self::round5Float($this->getWidth());
+        $cordSym =  self::getCordSymbol($this->getCord());
+        $d = $this->getDisk();
+        return $h.'x'.$w.$cordSym.$d;
+    }
+    
+    
+    /*
+    * Generate European(metric) name for tyre e.g. 265/75R16
+    * @return string
+    */
+    
+    public function getMetricName()
+    {
         $w =  self::round5Int(round($this->getWidth()*self::INCH));
         $profil = (self::INCH*($this->getHeigth() - $this->getDisk())/2);
         $percent = self::round5Int(round($profil*100/$w));
@@ -160,13 +184,13 @@ abstract class  TyreSize extends Size{
         return $w.'/'.$percent.$cordSym.$d;
     }
     
-    public function getInchName(){
-        $h =  self::round5Float($this->getHeigth());
-        $w =  self::round5Float($this->getWidth());
-        $cordSym =  self::getCordSymbol($this->getCord());
-        $d = $this->getDisk();
-        return $h.'x'.$w.$cordSym.$d;
-    }
+    
+    
+    /*
+     *  Get tyre cord name depend of cord type (Diagonal or Radial)
+     *  @throws \Exception for some tyres whom cord type can't be detected 
+     *  @return string
+     */
     
     public function getCord()
     {
@@ -179,33 +203,112 @@ abstract class  TyreSize extends Size{
 
     }
     
-    protected function validateHeigth(){
-        $h = $this->getHeigth();
-        if ( $h < 25 || $h > 100){
-            throw new \Exception("Bad heigth :".$h);
-        }
+    /*
+     *  Get tyre value by external boundary in m^3
+     *  Suitable for transport company
+     *  @return float
+     */
+     public function getValue(){
+        $w = $this->getInch_W()*self::INCH/1000; //in m3
+        $h = $this->getInch_H()*self::INCH/1000;
+        return $w*$h;
     }
     
-    protected function validateWidth(){
-        $w = $this->getWidth();
-        if ($w < 5 || $w > 50){
-            throw new \Exception("Bad Width :".$w);
-        }
+    
+    /*
+     * Generate pattern for searching this tyre by it size in SQL DB
+     * @return string
+     */
+    
+    public function getSqlSearchPattern(){
+        $name = $this->getClearOriginal();
+        $shortCordReplace = $this->replaceDelimetrs($name);
+        $doubleCordReplace = $this->replaceDelimetrs($name,'__');
+        $tripleCordReplace = $this->replaceDelimetrs($name,'___');  
+        return array($shortCordReplace,$doubleCordReplace,$tripleCordReplace);
     }
     
-    protected function validateDisk(){
-        $d = $this->getDisk();
-        if ($d < 4 && $d > 15){
-            throw new \Exception("Bad Disk :".$d);
-        }
-    }
-
+    /*
+    * Validate current tyre dimensions
+    * @throw InvalidTyreSizeException if dimension is invalid
+    */
     public function Validate(){
         $this->validateHeigth();
         $this->validateWidth();
         $this->validateDisk();
     }
     
+    // =================== deprecated renamed methods =========================
+    
+    
+    public function getDisk()
+    {
+        return $this->getWheel();
+    }
+    
+    public function getCm_H()
+    {
+       return $this->getProfile();
+    }
+
+    public function getCm_W()
+    {
+        return $this->getMetricWidth();
+    }
+    
+    public function getInch_H()
+    {
+        return $this->getInchHeigth();
+    }
+    
+    public function getInch_W()
+    {
+        return  $this->getInchWidth();
+    }
+    
+    
+    //=================== end of public interface ==============================
+    
+    /*
+    * Get raw tyre heigth in inches
+    * @return float 
+    */
+    protected function getHeigth()
+    {
+        return $this->heigth;
+    }
+    
+    /*
+    * Get raw tyre width in inches
+    * @return float
+    */
+    protected function getWidth()
+    {
+        return $this->width;
+    }
+    
+    
+    protected function validateHeigth(){
+        $h = $this->getHeigth();
+        if ( $h < 25 || $h > 100){
+            throw new InvalidTyreSizeException("Bad heigth :".$h);
+        }
+    }
+    
+    protected function validateWidth(){
+        $w = $this->getWidth();
+        if ($w < 5 || $w > 50){
+            throw new InvalidTyreSizeException("Bad Width :".$w);
+        }
+    }
+    
+    protected function validateDisk(){
+        $d = $this->getDisk();
+        if ($d < 4 && $d > 15){
+            throw new InvalidTyreSizeException("Bad Disk :".$d);
+        }
+    }
+
     
     public static function checkSize($inchSize,&$matches = null){
         return preg_match(static::$pattern, $inchSize,$matches) == 1; // Late static binding work !
@@ -236,20 +339,6 @@ abstract class  TyreSize extends Size{
         return strtr($name,$replacePairs);
     }
     
-    public function getSqlSearchPattern(){
-        $name = $this->getClearOriginal();
-        $shortCordReplace = $this->replaceDelimetrs($name);
-        $doubleCordReplace = $this->replaceDelimetrs($name,'__');
-        $tripleCordReplace = $this->replaceDelimetrs($name,'___');  
-        return array($shortCordReplace,$doubleCordReplace,$tripleCordReplace);
-    }
-    
-    
-     public function getValue(){
-        $w = $this->getInch_W()*self::INCH/1000; //in m3
-        $h = $this->getInch_H()*self::INCH/1000;
-        return $w*$h;
-        //*$this->getInch_W()*self::INCH/10000;
-    }
+   
     
 }

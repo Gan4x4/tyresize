@@ -13,7 +13,7 @@ namespace gan4x4\Market\Size;
  *
  * @author anton
  */
-class InvalidTyreSizeException extends Exception{
+class InvalidTyreSizeException extends \Exception{
     protected $message = "String represented tyre size is invalid and can't be parset. ";
             
     //put your code here

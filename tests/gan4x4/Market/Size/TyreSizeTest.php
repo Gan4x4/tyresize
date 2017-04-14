@@ -1,7 +1,8 @@
 <?php
     namespace gan4x4\Tests\Market\Size;
     use gan4x4\Market\Size\TyreSize;
-
+    use gan4x4\Market\Size\InvalidTyreSizeException;
+    
     define("ORIGINAL",0);
     define("METRIC",1);
     define("INCH_H",2);
@@ -123,8 +124,8 @@
     }
     
     public function testConstructorNegative() {
-        $this->setExpectedException('Exception');        
-        $size = TyreSize::parseSize('blablabla');
+        $this->setExpectedException($this->originalNamespace.'\InvalidTyreSizeException');        
+        TyreSize::parseSize('blablabla');
     }
     
 }

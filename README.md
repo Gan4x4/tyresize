@@ -1,4 +1,4 @@
-#Tyre size parser
+# Tyre size parser
 
 Tyres of the same size may have different markings. The most famous is American (inch **31x10.5R16**) and European(Metric). 
 
@@ -13,14 +13,14 @@ Some tires do not contain explicit information about the size of the marking for
 This library helps to work with such a variety of markings. It can be used to create tire calculators or search the database of tires.
 
 
-##Installation
+## Installation
 The Tyre size parser can be installed with Composer. Run this command:
 ```sh
     composer require gan4x4/tyresize
 ```
 
 
-##Usage
+## Usage
 
 ```php
 <?php

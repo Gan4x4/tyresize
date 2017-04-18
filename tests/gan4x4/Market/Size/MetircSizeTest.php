@@ -43,7 +43,7 @@ class MetricTyreSizeTest extends  TyreSizeTest {
     }
     
      public function testExtractDiskMetric() {
-        $disk = TyreSize::parseSize("255/60R22")->getDisk();
+        $disk = TyreSize::parseSize("255/60R22")->getWheel();
         $this->assertEquals(22,$disk);
     }
 }

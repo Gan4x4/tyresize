@@ -1,3 +1,28 @@
+#Tyre size parser
+
+Tyres of the same size may have different markings. The most famous is American (inch **31x10.5R16**) and European(Metric). 
+
+Inch size specifies the height and width of the tire in inches and the inch size of the disk. For example **31x10.5R16**.
+
+In the second case the marking includes a width in millimeters, the height of the profile of the tire in percent inch disk size: 265/75R16
+
+In addition, a number of manufacturers mark light-truck, truck and pneumatic tires in a special way.
+So for example, in Interco company width and height are swapped for som tires (**16x35-16** instead of the **35x16-16** Bogger tire B-119). A number of pneumatic wheels are marked with metric units, but do not indicate the profile: 1300x700-24
+Some tires do not contain explicit information about the size of the marking for example **Q78-15** or **160m**.
+
+This library helps to work with such a variety of markings. It can be used to create tire calculators or search the database of tires.
+
+
+##Installation
+The Tyre size parser can be installed with Composer. Run this command:
+```sh
+    composer require gan4x4/tyresize
+```
+
+
+##Usage
+
+```php
 <?php
 
 /* 
@@ -54,3 +79,5 @@ try{
 } catch (InvalidTyreSizeException $ex) {
     print "Invalid tyre size";
 }
+
+```

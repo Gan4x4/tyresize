@@ -89,7 +89,7 @@ use gan4x4\Market\Size\InchTyreSize;
 
 
     public function testExtractDiskInch() {
-        $disk = TyreSize::parseSize("36x12.5-16")->getDisk();
+        $disk = TyreSize::parseSize("36x12.5-16")->getWheel();
         $this->assertEquals(16,$disk);
     }
     
@@ -105,7 +105,7 @@ use gan4x4\Market\Size\InchTyreSize;
     }
     
     public function testExtractDiskHummer() {
-        $disk = TyreSize::parseSize("35x12,5R16.5")->getDisk();
+        $disk = TyreSize::parseSize("35x12,5R16.5")->getWheel();
         $this->assertEquals(16.5,$disk);
     }
     

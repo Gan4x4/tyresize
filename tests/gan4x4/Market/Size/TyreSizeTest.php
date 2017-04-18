@@ -63,11 +63,11 @@
             assert(count($size) == 7 );
             $inch_size = new $class($size[ORIGINAL]);
             $add = "failed in $class for ". $size[ORIGINAL];
-            $this->assertEquals($size[INCH_H],$inch_size->getInch_H(),"Inch H ".$add);
-            $this->assertEquals($size[INCH_W],$inch_size->getInch_W(),"Inch W failed ".$add);
-            $this->assertEquals($size[DISK],$inch_size->getDisk(),"Disk failed ".$add);
-            $this->assertEquals($size[METRIC_H],$inch_size->getCm_H(),"Cm H failed ".$add);
-            $this->assertEquals($size[METRIC_W],$inch_size->getCm_W(),"Cm W failed ".$add);
+            $this->assertEquals($size[INCH_H],$inch_size->getInchHeigth(),"Inch H ".$add);
+            $this->assertEquals($size[INCH_W],$inch_size->getInchWidth(),"Inch W failed ".$add);
+            $this->assertEquals($size[DISK],$inch_size->getWheel(),"Disk failed ".$add);
+            $this->assertEquals($size[METRIC_H],$inch_size->getProfile(),"Cm H failed ".$add);
+            $this->assertEquals($size[METRIC_W],$inch_size->getMetricWidth(),"Cm W failed ".$add);
         }
     }
    

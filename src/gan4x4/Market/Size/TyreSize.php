@@ -97,6 +97,19 @@ abstract class  TyreSize extends Size{
             return self::truncateFloat($goodNumber/10);
         }
     }
+    
+    
+     public static function getCordSymbol($type){
+        assert(in_array($type, self::$cords)); 
+        $cordsFlipped =  array_flip(self::$cords);
+        return $cordsFlipped[$type]; 
+    }
+    
+    public static function getCordFromDelim($delim){
+        $clearDelim = trim($delim);
+        assert(in_array($clearDelim, array_keys(self::$cords)));
+        return self::$cords[$clearDelim];
+    }
     //==================== end helper ========================================
     
     
@@ -125,19 +138,20 @@ abstract class  TyreSize extends Size{
     * get rounded tyre profile in percent
     * @return  int 
     */
-    public function getProfile(){
+    public function getProfile()
+    {
         $h = floatval($this->getHeigth());
         $w = floatval($this->getWidth());
         $d = floatval($this->getDisk());
         
         $profileH = ($h-$d)/2;
         $percentOfW = round(100*$profileH/$w);
-        return  self::round5Int($percentOfW);
-              
+        return  self::round5Int($percentOfW);  
     }
     
     /*
     * get rounded tyre Heigth in inch
+    * 
     * @return  int 
     */
     public function getInchHeigth()
@@ -147,6 +161,7 @@ abstract class  TyreSize extends Size{
     
     /*
     * get rounded tyre width in inch
+    * 
     * @return  int 
     */
     public function getInchWidth()
@@ -157,6 +172,7 @@ abstract class  TyreSize extends Size{
     
     /*
     * Generate American(inch) name for tyre e.g. 31/10R15
+    * 
     * @return string
     */
     public function getInchName()
@@ -171,9 +187,9 @@ abstract class  TyreSize extends Size{
     
     /*
     * Generate European(metric) name for tyre e.g. 265/75R16
+    * 
     * @return string
     */
-    
     public function getMetricName()
     {
         $w =  self::round5Int(round($this->getWidth()*self::INCH));
@@ -208,7 +224,8 @@ abstract class  TyreSize extends Size{
      *  Suitable for transport company
      *  @return float
      */
-     public function getValue(){
+    public function getValue()
+    {
         $w = $this->getInch_W()*self::INCH/1000; //in m3
         $h = $this->getInch_H()*self::INCH/1000;
         return $w*$h;
@@ -237,6 +254,13 @@ abstract class  TyreSize extends Size{
         $this->validateWidth();
         $this->validateDisk();
     }
+    
+    public static function checkSize($inchSize,&$matches = null){
+        return preg_match(static::$pattern, $inchSize,$matches) == 1; // Late static binding work !
+    }
+
+   
+    
     
     // =================== deprecated renamed methods =========================
     
@@ -310,21 +334,7 @@ abstract class  TyreSize extends Size{
     }
 
     
-    public static function checkSize($inchSize,&$matches = null){
-        return preg_match(static::$pattern, $inchSize,$matches) == 1; // Late static binding work !
-    }
-
-    public static function getCordSymbol($type){
-        assert(in_array($type, self::$cords)); 
-        $cordsFlipped =  array_flip(self::$cords);
-        return $cordsFlipped[$type]; 
-    }
     
-    public static function getCordFromDelim($delim){
-        $clearDelim = trim($delim);
-        assert(in_array($clearDelim, array_keys(self::$cords)));
-        return self::$cords[$clearDelim];
-    }
     
     private function replaceDelimetrs($name,$cordReplacer = '_'){
         $replacePairs = array();

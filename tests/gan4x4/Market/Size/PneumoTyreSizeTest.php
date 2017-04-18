@@ -85,7 +85,7 @@ class PneumoTyreSizeTest extends TyreSizeTest {
    
     
      public function testExtractDiskPneumo() {
-        $disk = TyreSize::parseSize("1020х420-18")->getDisk();
+        $disk = TyreSize::parseSize("1020х420-18")->getWheel();
         $this->assertEquals(18,$disk);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 namespace gan4x4\Market\Size;
-use gan4x4\Market\Size;
+use gan4x4\Market\Size\Size;
 use gan4x4\Market\Size\InvalidTyreSizeException;
 
 abstract class  TyreSize extends Size{

@@ -1,6 +1,10 @@
 <?php
-
-namespace gan4x4\Market;
+/*
+ * Abstract class for all sizible objects
+ * in future can be uset to create wheel size if need
+ * 
+ */
+namespace gan4x4\Market\Size;
 
 abstract class Size {
     const INCH = 25.4;

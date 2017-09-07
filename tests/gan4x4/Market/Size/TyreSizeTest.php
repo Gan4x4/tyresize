@@ -47,6 +47,11 @@
             array("19.5/44 -16.5LT","",44,19.5,16.5,495,70)
             );
         
+        protected $custom = array(
+            array("160","",36.5,12.5,16,315,85)
+            
+            );
+        
         
     protected function setUp() {
        

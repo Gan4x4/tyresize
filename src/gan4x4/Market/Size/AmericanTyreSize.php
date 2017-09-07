@@ -1,7 +1,6 @@
 <?php
 
 namespace gan4x4\Market\Size;
-use gan4x4\Market\Tyre;
 
 class AmericanTyreSize extends TyreSize {
     static protected $pattern = "/^[\D]*?Q(78)-(1[56])/";

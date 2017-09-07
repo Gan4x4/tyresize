@@ -31,7 +31,7 @@ abstract class  TyreSize extends Size{
     // Factory
     public static function parseSize($originalSize){
         $object = null;
-        $childrens = array ('Metric','Inch','Pneumo','FullProfile','FullProfileInch','American','ReverseInch','Avtoros','MetricDisk');
+        $childrens = array ('Metric','Inch','Pneumo','FullProfile','FullProfileInch','American','ReverseInch','Avtoros','MetricDisk','Custom');
         $found = array();
         $calledClass = get_called_class();
         $namespaceEnd = strrpos($calledClass, '\\');
